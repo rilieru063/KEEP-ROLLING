@@ -12,6 +12,7 @@ public class StageData
 public class StageLoader : MonoBehaviour
 {
     public GameObject platformPrefab;
+    public GameObject startPrefab;
     public Transform platformRoot;
 
     void Start()
@@ -24,7 +25,7 @@ public class StageLoader : MonoBehaviour
         string path = Path.Combine(
             Application.streamingAssetsPath,
             "StageData",
-            "Stage00.json"
+            "Stage01.json"
         );
 
         string json = File.ReadAllText(path);
@@ -35,14 +36,16 @@ public class StageLoader : MonoBehaviour
         {
             for (int x = 0; x < stageData.width; x++)
             {
-                if (stageData.platform[y * stageData.width + x] == 1)
-                {
-                    Vector3 position = new Vector3(
-                        x - (stageData.width - 1) / 2.0f,
-                        0,
-                        y - (stageData.height - 1) / 2.0f
-                    );
+                int value = stageData.platform[y * stageData.width + x];
 
+                Vector3 position = new Vector3(
+                    x - (stageData.width - 1) / 2.0f,
+                    0,
+                    y - (stageData.height - 1) / 2.0f
+                );
+
+                if (value == 1)
+                {
                     Instantiate(
                         platformPrefab,
                         position,
@@ -50,6 +53,16 @@ public class StageLoader : MonoBehaviour
                         platformRoot
                     );
                 }
+                else if (value == 2)
+                {
+                    Instantiate(
+                        startPrefab,
+                        position,
+                        Quaternion.identity,
+                        platformRoot
+                    );
+                }
+
             }
         }
     }
